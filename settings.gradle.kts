@@ -1,1 +1,0 @@
-rootProject.name = "unidad4-ejemplo-neo4j-spring"
