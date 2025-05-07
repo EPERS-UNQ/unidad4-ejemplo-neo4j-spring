@@ -3,6 +3,7 @@ package ar.edu.unq.epers.unidad4;
 import ar.edu.unq.epers.unidad4.model.Gremio;
 import ar.edu.unq.epers.unidad4.model.Item;
 import ar.edu.unq.epers.unidad4.model.Personaje;
+import ar.edu.unq.epers.unidad4.model.PersonajeSQL;
 import ar.edu.unq.epers.unidad4.service.interfaces.GremioService;
 import ar.edu.unq.epers.unidad4.service.interfaces.ItemService;
 import ar.edu.unq.epers.unidad4.service.interfaces.PersonajeService;
@@ -10,7 +11,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class PersonajeServiceTest {
@@ -108,14 +110,51 @@ public class PersonajeServiceTest {
     }
 
     @Test
-    public void testAmigosDeMisAmigos(){
+    public void testAmigosDeMisAmigosNeo4J(){
         Personaje fuertucho = personajeService.guardar(new Personaje("Fuertucho", 500, 250));
         personajeService.amigarse(debilucho.getId(), maguin.getId());
         personajeService.amigarse(maguin.getId(), fuertucho.getId());
 
-        Collection<Personaje> amigos = personajeService.amigosDeMisAmigos(debilucho.getNombre());
+        Collection<Personaje> amigos = personajeService.amigosDeMisAmigosNeo4J(debilucho.getNombre());
         Assertions.assertEquals(1, amigos.size());
         Assertions.assertEquals("Fuertucho", amigos.iterator().next().getNombre());
+    }
+
+    @Test
+    public void testAmigosDeMisAmigosSQL(){
+        Personaje fuertucho = personajeService.guardar(new Personaje("Fuertucho", 500, 250));
+        personajeService.amigarse(debilucho.getId(), maguin.getId());
+        personajeService.amigarse(maguin.getId(), fuertucho.getId());
+
+        Collection<PersonajeSQL> amigos = personajeService.amigosDeMisAmigosSQL(debilucho.getNombre());
+        Assertions.assertEquals(1, amigos.size());
+        Assertions.assertEquals("Fuertucho", amigos.iterator().next().getNombre());
+    }
+
+    @Test
+    void testGenerarMilDatos() {
+        // Este test puede romper tu maquina. Estas advertido.
+        Random random = new Random();
+        for (int i = 1; i <= 1000; i++) {
+            Personaje unMago = new Personaje("NPC-" + i);
+            unMago.setPesoMaximo(random.nextInt(200, 300));
+            unMago.setVida(random.nextInt(50, 200));
+            personajeService.guardar(unMago);
+        }
+
+        List<Personaje> personajes = (List<Personaje>) personajeService.recuperarTodos();
+
+        for (Personaje personaje : personajes) {
+
+            for (int i = 0; i < 5; i++) {
+                Personaje candidato = personajes.get(random.nextInt(personajes.size()));
+                if (!candidato.equals(personaje)) {
+                    personajeService.amigarse(personaje.getId(), candidato.getId());
+                }
+            }
+
+
+        }
     }
 
     @AfterEach
