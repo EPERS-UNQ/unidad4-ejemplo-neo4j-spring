@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.unidad4.service.impl;
 
-import ar.edu.unq.epers.unidad4.dao.GremioDAO;
-import ar.edu.unq.epers.unidad4.dao.PersonajeDAO;
+import ar.edu.unq.epers.unidad4.persistence.GremioDAO;
+import ar.edu.unq.epers.unidad4.persistence.PersonajeDAO;
 import ar.edu.unq.epers.unidad4.exception.EntityNotFoundException;
 import ar.edu.unq.epers.unidad4.model.Gremio;
 import ar.edu.unq.epers.unidad4.model.Personaje;

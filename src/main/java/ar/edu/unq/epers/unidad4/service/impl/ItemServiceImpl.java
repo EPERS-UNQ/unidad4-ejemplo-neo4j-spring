@@ -1,6 +1,6 @@
 package ar.edu.unq.epers.unidad4.service.impl;
 
-import ar.edu.unq.epers.unidad4.dao.ItemDAO;
+import ar.edu.unq.epers.unidad4.persistence.ItemDAO;
 import ar.edu.unq.epers.unidad4.exception.EntityNotFoundException;
 import ar.edu.unq.epers.unidad4.model.Item;
 import ar.edu.unq.epers.unidad4.service.interfaces.ItemService;
