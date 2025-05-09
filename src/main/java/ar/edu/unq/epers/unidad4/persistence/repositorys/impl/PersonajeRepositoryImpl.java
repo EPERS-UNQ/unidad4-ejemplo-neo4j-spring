@@ -37,10 +37,14 @@ public class PersonajeRepositoryImpl implements PersonajeRepository {
     }
 
     @Override
+    public PersonajeSQL recuperarSQL(String nombre) {
+        return personajeDAOSQL.findByNombre(nombre);
+    }
+
+    @Override
     public Personaje recuperarPorNombre(String nombre) {
         return personajeDAO.findByNombre(nombre).orElseThrow(() -> new EntityNotFoundException("personaje", nombre));
     }
-
 
     @Override
     public Collection<Personaje> amigosDeMisAmigosNeo4J(String nombre) {
@@ -57,6 +61,16 @@ public class PersonajeRepositoryImpl implements PersonajeRepository {
         return personajeDAO.findAll();
     }
 
+    @Override
+    public void actualizar(Personaje personaje, PersonajeSQL personajeSQL) {
+        personajeDAO.save(personaje);
+        personajeDAOSQL.save(personajeSQL);
+    }
+
+    @Override
+    public void actualizar(Personaje personaje) {
+        personajeDAO.save(personaje);
+    }
 
     @Override
     public void clearAll() {

@@ -44,22 +44,21 @@ public class PersonajeServiceImpl implements PersonajeService {
 
         personaje.recoger(item);
 
-        personajeRepository.guardar(personaje);
+        personajeRepository.actualizar(personaje);
     }
 
     @Override
     public void amigarse(Long personajeId, Long amigoId) {
         Personaje personaje = personajeRepository.recuperar(personajeId);
+        PersonajeSQL personajeSQL = personajeRepository.recuperarSQL(personaje.getNombre());
         Personaje amigo = personajeRepository.recuperar(amigoId);
+        PersonajeSQL amigoSQL = personajeRepository.recuperarSQL(amigo.getNombre());
 
         personaje.amigarse(amigo);
+        personajeSQL.amigarse(amigoSQL);
 
-        // PersonajeSQL personajeSQL = personajeDAOSQL.findByNombre(personaje.getNombre());
-        // PersonajeSQL personajeSQLAmigo = personajeDAOSQL.findByNombre(amigo.getNombre());
-        // personajeSQL.amigarse(personajeSQLAmigo);
-
-        personajeRepository.guardar(personaje);
-        personajeRepository.guardar(amigo);
+        personajeRepository.actualizar(personaje, personajeSQL);
+        personajeRepository.actualizar(amigo, amigoSQL);
     }
 
     @Override

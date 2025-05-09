@@ -9,9 +9,12 @@ import java.util.Collection;
 public interface PersonajeRepository  {
     Personaje guardar(Personaje personaje);
     Personaje recuperar(Long personajeId);
+    PersonajeSQL recuperarSQL(String nombre);
     Personaje recuperarPorNombre(String nombre);
     Collection<Personaje> amigosDeMisAmigosNeo4J(String nombre);
     Collection<PersonajeSQL> amigosDeMisAmigosSQL(String nombre);
     Collection<Personaje> recuperarTodos();
     void clearAll();
+    void actualizar(Personaje personaje, PersonajeSQL personajeSQL);
+    void actualizar(Personaje personaje);
 }
