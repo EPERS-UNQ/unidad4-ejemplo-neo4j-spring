@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.unidad4.persistence;
+package ar.edu.unq.epers.unidad4.persistence.DAOs;
 
 import ar.edu.unq.epers.unidad4.model.PersonajeSQL;
 import org.springframework.data.jpa.repository.JpaRepository;

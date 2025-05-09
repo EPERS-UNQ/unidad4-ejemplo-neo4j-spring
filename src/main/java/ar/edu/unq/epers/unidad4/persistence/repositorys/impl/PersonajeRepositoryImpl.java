@@ -1,10 +1,14 @@
-package ar.edu.unq.epers.unidad4.persistence;
+package ar.edu.unq.epers.unidad4.persistence.repositorys.impl;
 
 
 import ar.edu.unq.epers.unidad4.exception.EntityNotFoundException;
 import ar.edu.unq.epers.unidad4.model.Item;
 import ar.edu.unq.epers.unidad4.model.Personaje;
 import ar.edu.unq.epers.unidad4.model.PersonajeSQL;
+import ar.edu.unq.epers.unidad4.persistence.DAOs.ItemDAO;
+import ar.edu.unq.epers.unidad4.persistence.DAOs.PersonajeDAO;
+import ar.edu.unq.epers.unidad4.persistence.DAOs.PersonajeDAOSQL;
+import ar.edu.unq.epers.unidad4.persistence.repositorys.interfaces.PersonajeRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -14,12 +18,10 @@ public class PersonajeRepositoryImpl implements PersonajeRepository {
 
     private final PersonajeDAOSQL personajeDAOSQL;
     private final PersonajeDAO personajeDAO;
-    private final ItemDAO itemDAO;
 
-    public PersonajeRepositoryImpl(PersonajeDAOSQL personajeDAOSQL, PersonajeDAO personajeDAO, ItemDAO itemDAO) {
+    public PersonajeRepositoryImpl(PersonajeDAOSQL personajeDAOSQL, PersonajeDAO personajeDAO) {
         this.personajeDAOSQL = personajeDAOSQL;
         this.personajeDAO = personajeDAO;
-        this.itemDAO = itemDAO;
     }
 
     @Override
@@ -39,31 +41,6 @@ public class PersonajeRepositoryImpl implements PersonajeRepository {
         return personajeDAO.findByNombre(nombre).orElseThrow(() -> new EntityNotFoundException("personaje", nombre));
     }
 
-    @Override
-    public void recoger(Long personajeId, Long itemId) {
-        Personaje personaje = personajeDAO.findById(personajeId).get();
-        Item item = itemDAO.findById(itemId).get();
-
-        personaje.recoger(item);
-
-        personajeDAO.save(personaje);
-    }
-
-    @Override
-    public void amigarse(Long personajeId, Long amigoId) {
-        Personaje personaje = personajeDAO.findById(personajeId).get();
-        Personaje amigo = personajeDAO.findById(amigoId).get();
-
-        personaje.amigarse(amigo);
-
-        PersonajeSQL personajeSQL = personajeDAOSQL.findByNombre(personaje.getNombre());
-        PersonajeSQL personajeSQLAmigo = personajeDAOSQL.findByNombre(amigo.getNombre());
-
-        personajeSQL.amigarse(personajeSQLAmigo);
-
-        personajeDAO.save(personaje);
-        personajeDAOSQL.save(personajeSQL);
-    }
 
     @Override
     public Collection<Personaje> amigosDeMisAmigosNeo4J(String nombre) {

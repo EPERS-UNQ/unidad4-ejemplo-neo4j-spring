@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.unidad4.persistence;
+package ar.edu.unq.epers.unidad4.persistence.DAOs;
 
 import ar.edu.unq.epers.unidad4.model.Item;
 import org.springframework.data.neo4j.repository.Neo4jRepository;

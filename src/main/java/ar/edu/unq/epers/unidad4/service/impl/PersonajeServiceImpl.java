@@ -1,13 +1,10 @@
 package ar.edu.unq.epers.unidad4.service.impl;
 
-import ar.edu.unq.epers.unidad4.persistence.ItemDAO;
-import ar.edu.unq.epers.unidad4.persistence.PersonajeDAO;
-import ar.edu.unq.epers.unidad4.persistence.PersonajeDAOSQL;
-import ar.edu.unq.epers.unidad4.exception.EntityNotFoundException;
 import ar.edu.unq.epers.unidad4.model.Item;
 import ar.edu.unq.epers.unidad4.model.Personaje;
 import ar.edu.unq.epers.unidad4.model.PersonajeSQL;
-import ar.edu.unq.epers.unidad4.persistence.PersonajeRepository;
+import ar.edu.unq.epers.unidad4.persistence.repositorys.interfaces.ItemRepository;
+import ar.edu.unq.epers.unidad4.persistence.repositorys.interfaces.PersonajeRepository;
 import ar.edu.unq.epers.unidad4.service.interfaces.PersonajeService;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +14,12 @@ import java.util.Collection;
 public class PersonajeServiceImpl implements PersonajeService {
 
     private final PersonajeRepository personajeRepository;
+    private final ItemRepository itemRepository;
 
 
-    public PersonajeServiceImpl(PersonajeRepository personajeRepository) {
+    public PersonajeServiceImpl(PersonajeRepository personajeRepository, ItemRepository itemRepository) {
         this.personajeRepository = personajeRepository;
+        this.itemRepository = itemRepository;
     }
 
     @Override
@@ -40,12 +39,27 @@ public class PersonajeServiceImpl implements PersonajeService {
 
     @Override
     public void recoger(Long personajeId, Long itemId) {
-        personajeRepository.recoger(personajeId, itemId);
+        Personaje personaje = personajeRepository.recuperar(personajeId);
+        Item item = itemRepository.recuperar(itemId);
+
+        personaje.recoger(item);
+
+        personajeRepository.guardar(personaje);
     }
 
     @Override
     public void amigarse(Long personajeId, Long amigoId) {
-        personajeRepository.amigarse(personajeId, amigoId);
+        Personaje personaje = personajeRepository.recuperar(personajeId);
+        Personaje amigo = personajeRepository.recuperar(amigoId);
+
+        personaje.amigarse(amigo);
+
+        // PersonajeSQL personajeSQL = personajeDAOSQL.findByNombre(personaje.getNombre());
+        // PersonajeSQL personajeSQLAmigo = personajeDAOSQL.findByNombre(amigo.getNombre());
+        // personajeSQL.amigarse(personajeSQLAmigo);
+
+        personajeRepository.guardar(personaje);
+        personajeRepository.guardar(amigo);
     }
 
     @Override
