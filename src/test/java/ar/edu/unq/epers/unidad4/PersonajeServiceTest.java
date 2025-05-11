@@ -131,7 +131,7 @@ public class PersonajeServiceTest {
         Assertions.assertEquals("Fuertucho", amigos.iterator().next().getNombre());
     }
 
-    @Test
+    // @Test
     void testGenerarMilDatos() {
         // Este test puede romper tu maquina. Estas advertido.
         Random random = new Random();
