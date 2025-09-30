@@ -1,28 +1,28 @@
 package ar.edu.unq.epers.unidad4.model;
 
-import lombok.*;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
 
-@ToString
-@Setter
-@Getter
-@EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Node
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
-    @Id
-    @GeneratedValue
     private Long id;
     private String nombre;
     private int peso;
+    private Personaje owner;
 
     public Item(String nombre, int peso) {
         this.nombre = nombre;
         this.peso = peso;
     }
 
+    public Item(ItemSQL itemSQL) {
+        this.nombre = itemSQL.getNombre();
+        this.peso = itemSQL.getPeso();
+    }
 }

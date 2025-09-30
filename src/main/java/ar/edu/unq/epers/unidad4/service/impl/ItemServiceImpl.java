@@ -1,8 +1,8 @@
 package ar.edu.unq.epers.unidad4.service.impl;
 
-import ar.edu.unq.epers.unidad4.dao.ItemDAO;
+import ar.edu.unq.epers.unidad4.persistence.sql.ItemSQLDAO;
 import ar.edu.unq.epers.unidad4.exception.EntityNotFoundException;
-import ar.edu.unq.epers.unidad4.model.Item;
+import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
 import ar.edu.unq.epers.unidad4.service.interfaces.ItemService;
 import org.springframework.stereotype.Service;
 
@@ -11,34 +11,34 @@ import java.util.Collection;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemDAO itemDAO;
+    private final ItemSQLDAO itemSQLDAO;
 
-    public ItemServiceImpl(ItemDAO itemDAO) {
-        this.itemDAO = itemDAO;
+    public ItemServiceImpl(ItemSQLDAO itemSQLDAO) {
+        this.itemSQLDAO = itemSQLDAO;
     }
 
     @Override
-    public Item guardar(Item item) {
-        return itemDAO.save(item);
+    public ItemSQL guardar(ItemSQL itemSQL) {
+        return itemSQLDAO.save(itemSQL);
     }
 
     @Override
-    public Item recuperar(Long itemId) {
-        return itemDAO.findById(itemId).orElseThrow(() -> new EntityNotFoundException("item", itemId));
+    public ItemSQL recuperar(Long itemId) {
+        return itemSQLDAO.findById(itemId).orElseThrow(() -> new EntityNotFoundException("item", itemId));
     }
 
     @Override
-    public Collection<Item> getMasPesados(int peso) {
-        return itemDAO.getMasPesados(peso);
+    public Collection<ItemSQL> getMasPesados(int peso) {
+        return itemSQLDAO.getMasPesados(peso);
     }
 
     @Override
-    public Collection<Item> getItemsPersonajesDebiles(int vida) {
-        return itemDAO.getItemsPersonajesDebiles(vida);
+    public Collection<ItemSQL> getItemsDePersonajesDebiles(int vida) {
+        return itemSQLDAO.getItemsDePersonajesDebiles(vida);
     }
 
     @Override
     public void clearAll() {
-        itemDAO.detachDelete();
+        itemSQLDAO.deleteAll();
     }
 }
