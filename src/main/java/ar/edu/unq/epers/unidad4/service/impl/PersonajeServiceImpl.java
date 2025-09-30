@@ -71,12 +71,13 @@ public class PersonajeServiceImpl implements PersonajeService {
 
     @Override
     public void amigarse(Long personajeId, Long amigoId) {
-        PersonajeNeo4J personajeNeo4J = personajeNeo4JDAO.findById(personajeId).get();
-        PersonajeNeo4J amigo = personajeNeo4JDAO.findById(amigoId).get();
+        PersonajeNeo4J personajeNeo4J = personajeNeo4JDAO.findBySourceId(personajeId).get();
+        PersonajeNeo4J amigo = personajeNeo4JDAO.findBySourceId(amigoId).get();
 
         personajeNeo4J.amigarse(amigo);
 
         personajeNeo4JDAO.save(personajeNeo4J);
+        personajeNeo4JDAO.save(amigo);
     }
 
     @Override

@@ -13,10 +13,10 @@ public interface PersonajeNeo4JDAO extends Neo4jRepository<PersonajeNeo4J, Long>
     @Query("MATCH(p: Personaje) DETACH DELETE p")
     void detachDelete();
 
-    @Query("MATCH(p: Personaje {nombre: $nombre }) RETURN p")
+    @Query("MATCH(p: Personaje {nombre: $nombre }) RETURN p LIMIT 1")
     Optional<PersonajeNeo4J> findByNombre(@Param("nombre") String nombre);
 
-    @Query("MATCH(p: Personaje {sourceId: $sourceId }) RETURN p")
+    @Query("MATCH(p: Personaje {sourceId: $sourceId }) RETURN p LIMIT 1")
     Optional<PersonajeNeo4J> findBySourceId(@Param("sourceId") Long sourceId);
 
     @Query("""
