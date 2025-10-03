@@ -7,7 +7,6 @@ import ar.edu.unq.epers.unidad4.model.Item;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,9 +114,9 @@ public class PersonajeServiceTest {
         assertEquals(3, todos.size());
     }
 
-//    @AfterEach
-//    void clearAll() {
-//        itemService.clearAll();
-//        personajeService.clearAll();
-//    }
+    @AfterEach
+    void clearAll() {
+        personajeService.clearAll();
+        itemService.clearAll();
+    }
 }

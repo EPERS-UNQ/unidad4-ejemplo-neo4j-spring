@@ -2,11 +2,11 @@ package ar.edu.unq.epers.unidad4.persistence.neo.entity;
 
 import ar.edu.unq.epers.unidad4.model.Personaje;
 import lombok.*;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,25 +18,23 @@ import java.util.Set;
 
 @Node(primaryLabel = "Personaje")
 public class PersonajeNeo4J {
-
     @Id
-    @GeneratedValue
     private Long id;
-    private Long sourceId;
     private String nombre;
     @Relationship(type = "AMIGO")
     private Set<PersonajeNeo4J> amigos = new HashSet<>();
 
-
-    public PersonajeNeo4J(Personaje model) {
-        this.sourceId = model.getId();
-        this.amigos = model.getAmigos()
-                .stream()
-                .filter(amigo -> !amigo.getId().equals(model.getId()))
-                .map(PersonajeNeo4J::new)
+    public PersonajeNeo4J(Personaje personaje) {
+        this.id = personaje.getId();
+        this.nombre = personaje.getNombre();
+        this.amigos = personaje.getAmigos().stream()
+                .map(amigo -> {
+                    PersonajeNeo4J amigoNeo4J = new PersonajeNeo4J();
+                    amigoNeo4J.setId(amigo.getId());
+                    amigoNeo4J.setNombre(amigo.getNombre());
+                    return amigoNeo4J;
+                })
+                .filter(amigo -> !amigo.getId().equals(personaje.getId()))
                 .collect(java.util.stream.Collectors.toSet());
-        this.nombre = model.getNombre();
     }
-
-
 }

@@ -28,7 +28,9 @@ public class Item {
     public Item(ItemSQL itemSQL) {
         this.nombre = itemSQL.getNombre();
         this.peso = itemSQL.getPeso();
-        this.owner = new Personaje(itemSQL.getOwner());
+        if (itemSQL.getOwner() != null) {
+            this.owner = new Personaje(itemSQL.getOwner());
+        }
     }
 
     public static Item from(ItemSQL itemSQL) {

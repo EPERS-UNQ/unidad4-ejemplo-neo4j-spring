@@ -44,7 +44,7 @@ public class Personaje {
                 .filter(amigo -> !amigo.getId().equals(personajeSQL.getId()))
                 .map(amigo -> {
                     Personaje amigoPersonaje = new Personaje();
-                    amigoPersonaje.setId(amigo.getSourceId());
+                    amigoPersonaje.setId(amigo.getId());
                     return amigoPersonaje;
                 })
                 .collect(java.util.stream.Collectors.toSet());

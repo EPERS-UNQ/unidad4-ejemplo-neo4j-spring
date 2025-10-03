@@ -27,6 +27,7 @@ public class PersonajeSQL {
     private Set<ItemSQL> inventario = new HashSet<>();
 
     public PersonajeSQL(Personaje model) {
+        this.id = model.getId();
         this.nombre = model.getNombre();
         this.vida = model.getVida();
         this.pesoMaximo = model.getPesoMaximo();

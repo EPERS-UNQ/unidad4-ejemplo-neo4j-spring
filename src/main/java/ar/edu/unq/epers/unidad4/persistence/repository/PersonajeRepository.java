@@ -8,7 +8,6 @@ public interface PersonajeRepository {
     Personaje guardar(Personaje personaej);
     Personaje recuperar(Long personajeId);
     Personaje recuperarPorNombre(String nombre);
-    void recoger(Long personajeId, Long itemId);
     Collection<Personaje> recuperarAmigosDeMisAMigos(String nombre);
     Collection<Personaje> recuperarTodos();
     void clearAll();

@@ -24,6 +24,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     public Item guardar(Item item) {
         ItemSQL itemSQL = new ItemSQL(item.getNombre(), item.getPeso());
         itemSQLDAO.save(itemSQL);
+        item.setId(itemSQL.getId());
         return item;
     }
 
