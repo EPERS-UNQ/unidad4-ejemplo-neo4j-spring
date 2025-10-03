@@ -45,6 +45,7 @@ public class Personaje {
                 .map(amigo -> {
                     Personaje amigoPersonaje = new Personaje();
                     amigoPersonaje.setId(amigo.getId());
+                    amigoPersonaje.setNombre(amigo.getNombre());
                     return amigoPersonaje;
                 })
                 .collect(java.util.stream.Collectors.toSet());
