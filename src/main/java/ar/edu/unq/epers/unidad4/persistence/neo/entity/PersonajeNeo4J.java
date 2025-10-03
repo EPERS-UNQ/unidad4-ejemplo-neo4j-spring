@@ -38,8 +38,5 @@ public class PersonajeNeo4J {
         this.nombre = model.getNombre();
     }
 
-    public void amigarse(PersonajeNeo4J personajeNeo4J) {
-        this.amigos.add(personajeNeo4J);
-    }
 
 }

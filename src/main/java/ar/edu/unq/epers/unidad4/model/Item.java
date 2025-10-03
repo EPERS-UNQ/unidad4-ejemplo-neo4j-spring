@@ -1,10 +1,14 @@
 package ar.edu.unq.epers.unidad4.model;
 
 
+import ar.edu.unq.epers.unidad4.persistence.neo.entity.PersonajeNeo4J;
 import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
+import ar.edu.unq.epers.unidad4.persistence.sql.entity.PersonajeSQL;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -24,5 +28,10 @@ public class Item {
     public Item(ItemSQL itemSQL) {
         this.nombre = itemSQL.getNombre();
         this.peso = itemSQL.getPeso();
+        this.owner = new Personaje(itemSQL.getOwner());
+    }
+
+    public static Item from(ItemSQL itemSQL) {
+        return new Item(itemSQL);
     }
 }

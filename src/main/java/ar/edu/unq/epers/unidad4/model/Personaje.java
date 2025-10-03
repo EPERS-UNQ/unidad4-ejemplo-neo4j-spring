@@ -67,4 +67,8 @@ public class Personaje {
         item.setOwner(this);
     }
 
+    public void amigarse(Personaje personaje) {
+        this.amigos.add(personaje);
+    }
+
 }
