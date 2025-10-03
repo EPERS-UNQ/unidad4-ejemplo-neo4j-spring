@@ -1,15 +1,13 @@
-package ar.edu.unq.epers.unidad4.service.interfaces;
+package ar.edu.unq.epers.unidad4.persistence.repository;
 
 import ar.edu.unq.epers.unidad4.model.Personaje;
 
 import java.util.Collection;
 
-public interface PersonajeService {
-    Personaje guardar(Personaje personajeNeo4J);
+public interface PersonajeRepository {
+    Personaje guardar(Personaje personaej);
     Personaje recuperar(Long personajeId);
     Personaje recuperarPorNombre(String nombre);
-    void recoger(Long personajeId, Long itemId);
-    void amigarse(Long personajeId, Long amigoId);
     Collection<Personaje> recuperarAmigosDeMisAMigos(String nombre);
     Collection<Personaje> recuperarTodos();
     void clearAll();
