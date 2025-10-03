@@ -2,10 +2,6 @@ package ar.edu.unq.epers.unidad4.service.impl;
 
 import ar.edu.unq.epers.unidad4.model.Personaje;
 import ar.edu.unq.epers.unidad4.persistence.repository.PersonajeRepository;
-import ar.edu.unq.epers.unidad4.persistence.sql.ItemSQLDAO;
-import ar.edu.unq.epers.unidad4.persistence.sql.PersonajeDAOSQL;
-import ar.edu.unq.epers.unidad4.exception.EntityNotFoundException;
-import ar.edu.unq.epers.unidad4.persistence.sql.entity.PersonajeSQL;
 import ar.edu.unq.epers.unidad4.service.interfaces.PersonajeService;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +11,9 @@ import java.util.Collection;
 public class PersonajeServiceImpl implements PersonajeService {
 
     private final PersonajeRepository personajeRepository;
-    private final ItemSQLDAO itemSQLDAO;
 
-    public PersonajeServiceImpl(PersonajeRepository personajeRepository, ItemSQLDAO itemSQLDAO, PersonajeDAOSQL personajeDAOSQL) {
+    public PersonajeServiceImpl(PersonajeRepository personajeRepository) {
         this.personajeRepository = personajeRepository;
-        this.itemSQLDAO = itemSQLDAO;
     }
 
     @Override

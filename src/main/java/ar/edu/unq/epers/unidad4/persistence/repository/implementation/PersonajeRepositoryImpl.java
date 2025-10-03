@@ -61,7 +61,8 @@ public class PersonajeRepositoryImpl implements PersonajeRepository {
     public void recoger(Long personajeId, Long itemId) {
         PersonajeSQL personajeSQL = personajeDAOSQL.findById(personajeId)
                 .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), personajeId));
-        ItemSQL itemSQL = itemSQLDAO.findById(itemId).get();
+        ItemSQL itemSQL = itemSQLDAO.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), personajeId));;
 
         Personaje personaje = new Personaje(personajeSQL);
         Item item = new Item(itemSQL);

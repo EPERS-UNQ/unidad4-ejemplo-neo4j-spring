@@ -23,7 +23,7 @@ public class PersonajeSQL {
     private int vida;
     private int pesoMaximo;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ItemSQL> inventario = new HashSet<>();
 
     public PersonajeSQL(Personaje model) {

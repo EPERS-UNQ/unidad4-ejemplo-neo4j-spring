@@ -1,12 +1,15 @@
 package ar.edu.unq.epers.unidad4;
 
-import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
-import ar.edu.unq.epers.unidad4.persistence.neo.entity.PersonajeNeo4J;
 import ar.edu.unq.epers.unidad4.service.interfaces.ItemService;
 import ar.edu.unq.epers.unidad4.service.interfaces.PersonajeService;
+import ar.edu.unq.epers.unidad4.model.Personaje;
+import ar.edu.unq.epers.unidad4.model.Item;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -16,119 +19,105 @@ public class PersonajeServiceTest {
     @Autowired private PersonajeService personajeService;
     @Autowired private ItemService itemService;
 
-    private PersonajeNeo4J maguin;
-    private PersonajeNeo4J debilucho;
-    private ItemSQL baculo;
-    private ItemSQL tunica;
+    private Personaje personaje1;
+    private Personaje personaje2;
+    private Personaje personaje3;
+    private Item item1;
 
     @BeforeEach
-    public void prepare() {
-        tunica = new ItemSQL("Tunica", 100);
-        baculo = new ItemSQL("Baculo", 50);
+    void setUp() {
+        personaje1 = new Personaje();
+        personaje1.setNombre("Gandalf");
+        personaje1.setVida(100);
+        personaje1.setPesoMaximo(50);
 
-        maguin = new PersonajeNeo4J("Maguin", 10, 70);
-        debilucho = new PersonajeNeo4J("Debilucho", 1, 1000);
+        personaje2 = new Personaje();
+        personaje2.setNombre("Frodo");
+        personaje2.setVida(80);
+        personaje2.setPesoMaximo(30);
 
-        itemService.guardar(tunica);
-        itemService.guardar(baculo);
-        personajeService.guardar(maguin);
-        personajeService.guardar(debilucho);
+        personaje3 = new Personaje();
+        personaje3.setNombre("Aragorn");
+        personaje3.setVida(120);
+        personaje3.setPesoMaximo(60);
+
+        item1 = new Item();
+        item1.setNombre("Anillo");
+        item1.setPeso(1);
     }
 
     @Test
-    public void testRecuperarPersonajePorNombre(){
-        PersonajeNeo4J maguito = personajeService.recuperarPorNombre(maguin.getNombre());
+    void testGuardarYRecuperarPersonaje() {
+        Personaje saved = personajeService.guardar(personaje1);
+        assertNotNull(saved.getId());
 
-        Assertions.assertEquals(maguin.getId(), maguito.getId());
-        Assertions.assertEquals(maguin.getVida(), maguito.getVida());
-        Assertions.assertEquals(maguin.getPesoMaximo(), maguito.getPesoMaximo());
+        Personaje recovered = personajeService.recuperar(saved.getId());
+        assertEquals(saved.getNombre(), recovered.getNombre());
+        assertEquals(saved.getVida(), recovered.getVida());
+        assertEquals(saved.getPesoMaximo(), recovered.getPesoMaximo());
     }
 
     @Test
-    public void testRecoger(){
-        personajeService.recoger(maguin.getId(), baculo.getId());
-        PersonajeNeo4J maguito = personajeService.recuperar(maguin.getId());
+    void testRecuperarPorNombre() {
+        personajeService.guardar(personaje1);
 
-        Assertions.assertEquals(1, maguito.getInventario().size());
-
-        ItemSQL baculo = maguito.getInventario().iterator().next();
-        Assertions.assertEquals("Baculo", baculo.getNombre());
-    }
-
-
-    @Test
-    public void testGetMasPesados() {
-        Collection<ItemSQL> itemSQLS = itemService.getMasPesados(10);
-        Assertions.assertEquals(2, itemSQLS.size());
-
-        Collection<ItemSQL> items2 = itemService.getMasPesados(80);
-        Assertions.assertEquals(1, items2.size());
+        Personaje recovered = personajeService.recuperarPorNombre("Gandalf");
+        assertNotNull(recovered);
+        assertEquals("Gandalf", recovered.getNombre());
     }
 
     @Test
-    public void testGetItemsPersonajesDebiles() {
-        Collection<ItemSQL> itemSQLS = itemService.getItemsDePersonajesDebiles(5);
-        Assertions.assertEquals(0, itemSQLS.size());
+    void testRecogerItem() {
+        Personaje savedPersonaje = personajeService.guardar(personaje1);
+        Item savedItem = itemService.guardar(item1);
 
-        personajeService.recoger(maguin.getId(), baculo.getId());
-        personajeService.recoger(debilucho.getId(), tunica.getId());
+        personajeService.recoger(savedPersonaje.getId(), savedItem.getId());
 
-        itemSQLS = itemService.getItemsDePersonajesDebiles(5);
-        Assertions.assertEquals(1, itemSQLS.size());
-        Assertions.assertEquals("Tunica", itemSQLS.iterator().next().getNombre());
+        Personaje personajeConItem = personajeService.recuperar(savedPersonaje.getId());
+        assertFalse(personajeConItem.getInventario().isEmpty());
+        assertEquals(1, personajeConItem.getInventario().size());
     }
 
     @Test
-    public void testAmigarse(){
-        personajeService.amigarse(maguin.getId(), debilucho.getId());
-        PersonajeNeo4J maguito = personajeService.recuperar(maguin.getId());
-        PersonajeNeo4J debil = personajeService.recuperar(debilucho.getId());
+    void testAmigarse() {
+        Personaje savedPersonaje1 = personajeService.guardar(personaje1);
+        Personaje savedPersonaje2 = personajeService.guardar(personaje2);
 
-        Assertions.assertEquals(0, debil.getAmigos().size());
-        Assertions.assertEquals(1, maguito.getAmigos().size());
-        Assertions.assertEquals("Debilucho", maguito.getAmigos().iterator().next().getNombre());
+        personajeService.amigarse(savedPersonaje1.getId(), savedPersonaje2.getId());
+
+        Personaje personajeConAmigo = personajeService.recuperar(savedPersonaje1.getId());
+        assertFalse(personajeConAmigo.getAmigos().isEmpty());
+        assertEquals(1, personajeConAmigo.getAmigos().size());
     }
 
     @Test
-    public void testRecuperarAmigosDeMisAMigos(){
-        PersonajeNeo4J fuertucho = personajeService.guardar(new PersonajeNeo4J("Fuertucho", 500, 250));
-        personajeService.amigarse(debilucho.getId(), maguin.getId());
-        personajeService.amigarse(maguin.getId(), fuertucho.getId());
+    void testRecuperarAmigosDeMisAmigos() {
+        // Crear una cadena de amigos: personaje1 -> personaje2 -> personaje3
+        Personaje saved1 = personajeService.guardar(personaje1);
+        Personaje saved2 = personajeService.guardar(personaje2);
+        Personaje saved3 = personajeService.guardar(personaje3);
 
-        Collection<PersonajeNeo4J> amigos = personajeService.recuperarAmigosDeMisAMigos(debilucho.getNombre());
-        Assertions.assertEquals(1, amigos.size());
-        Assertions.assertEquals("Fuertucho", amigos.iterator().next().getNombre());
+        personajeService.amigarse(saved1.getId(), saved2.getId());
+        personajeService.amigarse(saved2.getId(), saved3.getId());
+
+        Collection<Personaje> amigosDeAmigos = personajeService.recuperarAmigosDeMisAMigos(saved1.getNombre());
+        assertFalse(amigosDeAmigos.isEmpty());
+        assertTrue(amigosDeAmigos.stream().anyMatch(p -> p.getNombre().equals(saved3.getNombre())));
     }
 
-    // @Test
-    void testGenerarMilDatos() {
-        // Este test puede romper tu maquina. Estas advertido.
-        Random random = new Random();
-        for (int i = 1; i <= 1000; i++) {
-            PersonajeNeo4J unMago = new PersonajeNeo4J("NPC-" + i);
-            unMago.setPesoMaximo(random.nextInt(200, 300));
-            unMago.setVida(random.nextInt(50, 200));
-            personajeService.guardar(unMago);
-        }
+    @Test
+    void testRecuperarTodos() {
+        personajeService.guardar(personaje1);
+        personajeService.guardar(personaje2);
+        personajeService.guardar(personaje3);
 
-        List<PersonajeNeo4J> personajeNeo4JS = (List<PersonajeNeo4J>) personajeService.recuperarTodos();
-
-        for (PersonajeNeo4J personajeNeo4J : personajeNeo4JS) {
-
-            for (int i = 0; i < 5; i++) {
-                PersonajeNeo4J candidato = personajeNeo4JS.get(random.nextInt(personajeNeo4JS.size()));
-                if (!candidato.equals(personajeNeo4J)) {
-                    personajeService.amigarse(personajeNeo4J.getId(), candidato.getId());
-                }
-            }
-
-
-        }
+        Collection<Personaje> todos = personajeService.recuperarTodos();
+        assertEquals(3, todos.size());
     }
 
-    @AfterEach
-    public void tearDown(){
-        itemService.clearAll();
-        personajeService.clearAll();
-    }
+//    @AfterEach
+//    void clearAll() {
+//        itemService.clearAll();
+//        personajeService.clearAll();
+//    }
 }

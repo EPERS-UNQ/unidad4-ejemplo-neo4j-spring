@@ -2,8 +2,6 @@ package ar.edu.unq.epers.unidad4.service.impl;
 
 import ar.edu.unq.epers.unidad4.model.Item;
 import ar.edu.unq.epers.unidad4.persistence.repository.ItemRepository;
-import ar.edu.unq.epers.unidad4.exception.EntityNotFoundException;
-import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
 import ar.edu.unq.epers.unidad4.service.interfaces.ItemService;
 import org.springframework.stereotype.Service;
 
