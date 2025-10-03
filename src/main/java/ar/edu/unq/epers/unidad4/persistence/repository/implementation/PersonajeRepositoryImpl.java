@@ -34,13 +34,6 @@ public class PersonajeRepositoryImpl implements PersonajeRepository {
         return personaje;
     }
 
-    private Collection<PersonajeNeo4J> findAmigosNeo4J(Personaje personaje) {
-        return personaje.getAmigos().stream()
-                .map(amigo -> personajeNeo4JDAO.findByNombre(amigo.getNombre())
-                        .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), amigo.getId())))
-                .toList();
-    }
-
     @Override
     public Personaje recuperar(Long personajeId) {
         PersonajeSQL personajeSQL = personajeDAOSQL.findById(personajeId)
