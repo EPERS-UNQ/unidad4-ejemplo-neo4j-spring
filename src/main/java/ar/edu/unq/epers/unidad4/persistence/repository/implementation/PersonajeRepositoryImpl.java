@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.unidad4.persistence.repositorys.implementation;
+package ar.edu.unq.epers.unidad4.persistence.repository.implementation;
 
 
 

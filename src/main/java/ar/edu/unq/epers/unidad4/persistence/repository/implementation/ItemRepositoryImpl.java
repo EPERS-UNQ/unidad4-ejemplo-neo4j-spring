@@ -7,10 +7,12 @@ import ar.edu.unq.epers.unidad4.persistence.repository.ItemRepository;
 import ar.edu.unq.epers.unidad4.persistence.sql.ItemSQLDAO;
 import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
 import ar.edu.unq.epers.unidad4.persistence.sql.entity.PersonajeSQL;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
 
+@Component
 public class ItemRepositoryImpl implements ItemRepository {
     private final ItemSQLDAO itemSQLDAO;
 
