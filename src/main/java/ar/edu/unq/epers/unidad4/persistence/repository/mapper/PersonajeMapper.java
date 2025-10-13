@@ -35,19 +35,6 @@ public class PersonajeMapper {
     }
 
     public PersonajeNeo4J toNeo4J(Personaje personaje) {
-        PersonajeNeo4J personajeNeo4J = new PersonajeNeo4J();
-        personajeNeo4J.setId(personaje.getId());
-        personajeNeo4J.setNombre(personaje.getNombre());
-        personajeNeo4J.setAmigos(personaje.getAmigos().stream()
-                .map(amigo -> {
-                    PersonajeNeo4J amigoNeo4J = new PersonajeNeo4J();
-                    amigoNeo4J.setId(amigo.getId());
-                    amigoNeo4J.setNombre(amigo.getNombre());
-                    return amigoNeo4J;
-                })
-                .filter(amigo -> !amigo.getId().equals(personaje.getId()))
-                .collect(java.util.stream.Collectors.toSet()));
-        return personajeNeo4J;
+        return modelMapper.map(personaje, PersonajeNeo4J.class);
     }
-
 }
