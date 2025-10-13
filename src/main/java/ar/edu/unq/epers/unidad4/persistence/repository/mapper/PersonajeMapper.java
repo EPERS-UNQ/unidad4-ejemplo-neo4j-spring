@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class PersonajeMapper {
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper;
 
     public PersonajeMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
