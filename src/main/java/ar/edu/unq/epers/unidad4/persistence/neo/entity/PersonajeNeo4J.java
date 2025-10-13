@@ -14,27 +14,15 @@ import java.util.Set;
 @Setter
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 
 @Node(primaryLabel = "Personaje")
 public class PersonajeNeo4J {
     @Id
-    private Long id;
-    private String nombre;
+    Long id;
+    String nombre;
     @Relationship(type = "AMIGO")
-    private Set<PersonajeNeo4J> amigos = new HashSet<>();
+    Set<PersonajeNeo4J> amigos = new HashSet<>();
 
-    public PersonajeNeo4J(Personaje personaje) {
-        this.id = personaje.getId();
-        this.nombre = personaje.getNombre();
-        this.amigos = personaje.getAmigos().stream()
-                .map(amigo -> {
-                    PersonajeNeo4J amigoNeo4J = new PersonajeNeo4J();
-                    amigoNeo4J.setId(amigo.getId());
-                    amigoNeo4J.setNombre(amigo.getNombre());
-                    return amigoNeo4J;
-                })
-                .filter(amigo -> !amigo.getId().equals(personaje.getId()))
-                .collect(java.util.stream.Collectors.toSet());
+    public PersonajeNeo4J() {
     }
 }

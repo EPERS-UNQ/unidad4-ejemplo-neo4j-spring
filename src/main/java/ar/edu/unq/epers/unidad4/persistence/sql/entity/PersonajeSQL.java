@@ -1,5 +1,5 @@
 package ar.edu.unq.epers.unidad4.persistence.sql.entity;
-import ar.edu.unq.epers.unidad4.model.Personaje;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,12 +25,4 @@ public class PersonajeSQL {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ItemSQL> inventario = new HashSet<>();
-
-    public PersonajeSQL(Personaje model) {
-        this.id = model.getId();
-        this.nombre = model.getNombre();
-        this.vida = model.getVida();
-        this.pesoMaximo = model.getPesoMaximo();
-        model.getInventario().forEach(item -> this.inventario.add(new ItemSQL(item.getNombre(), item.getPeso())));
-    }
 }

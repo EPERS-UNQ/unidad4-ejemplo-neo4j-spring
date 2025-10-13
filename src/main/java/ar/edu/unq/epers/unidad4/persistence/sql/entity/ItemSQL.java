@@ -22,9 +22,4 @@ public class ItemSQL {
     @ManyToOne
     private PersonajeSQL owner;
 
-    public ItemSQL(String nombre, int peso) {
-        this.nombre = nombre;
-        this.peso = peso;
-    }
-
 }
