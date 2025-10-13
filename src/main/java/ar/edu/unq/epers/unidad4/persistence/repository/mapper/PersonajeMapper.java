@@ -6,6 +6,9 @@ import ar.edu.unq.epers.unidad4.persistence.sql.entity.PersonajeSQL;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Component
 public class PersonajeMapper {
 
@@ -17,16 +20,13 @@ public class PersonajeMapper {
 
     public Personaje toModel(PersonajeSQL personajeSQL, PersonajeNeo4J personajeNeo4J) {
         Personaje personaje = modelMapper.map(personajeSQL, Personaje.class);
-        personaje.setAmigos(personajeNeo4J.getAmigos()
+
+        Set<Personaje> amigos = personajeNeo4J.getAmigos()
                 .stream()
                 .filter(amigo -> !amigo.getId().equals(personajeSQL.getId()))
-                .map(amigo -> {
-                    Personaje amigoPersonaje = new Personaje();
-                    amigoPersonaje.setId(amigo.getId());
-                    amigoPersonaje.setNombre(amigo.getNombre());
-                    return amigoPersonaje;
-                })
-                .collect(java.util.stream.Collectors.toSet()));
+                .map(amigo -> modelMapper.map(amigo, Personaje.class)).collect(Collectors.toSet());
+
+        personaje.setAmigos(amigos);
         return personaje;
     }
 
