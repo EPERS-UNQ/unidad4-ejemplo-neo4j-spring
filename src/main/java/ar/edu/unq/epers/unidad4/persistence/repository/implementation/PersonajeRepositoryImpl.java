@@ -8,7 +8,6 @@ import ar.edu.unq.epers.unidad4.persistence.neo.entity.PersonajeNeo4J;
 import ar.edu.unq.epers.unidad4.persistence.repository.PersonajeRepository;
 import ar.edu.unq.epers.unidad4.persistence.repository.mapper.PersonajeMapper;
 import ar.edu.unq.epers.unidad4.persistence.sql.PersonajeDAOSQL;
-import ar.edu.unq.epers.unidad4.persistence.sql.entity.PersonajeSQL;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -28,52 +27,50 @@ public class PersonajeRepositoryImpl implements PersonajeRepository {
 
     @Override
     public Personaje guardar(Personaje personaje) {
-        PersonajeSQL personajeSQL = personajeMapper.toSQL(personaje);
-        personajeDAOSQL.save(personajeSQL);
-        personaje.setId(personajeSQL.getId());
-        PersonajeNeo4J personajeNeo4J = personajeMapper.toNeo4J(personaje);
+        Personaje personajeGuardado = personajeDAOSQL.save(personaje);
+        PersonajeNeo4J personajeNeo4J = personajeMapper.toNeo4J(personajeGuardado);
         personajeNeo4JDAO.save(personajeNeo4J);
-        return personaje;
+        return personajeGuardado;
     }
 
     @Override
     public Personaje recuperar(Long personajeId) {
-        PersonajeSQL personajeSQL = personajeDAOSQL.findById(personajeId)
-                .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), personajeId));
+        Personaje personaje = personajeDAOSQL.findById(personajeId)
+                .orElseThrow(() -> new EntityNotFoundException(Personaje.class.getName(), personajeId));
         PersonajeNeo4J personajeNeo4J = personajeNeo4JDAO.findById(personajeId)
-                .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), personajeId));
-        return personajeMapper.toModel(personajeSQL, personajeNeo4J);
+                .orElseThrow(() -> new EntityNotFoundException(Personaje.class.getName(), personajeId));
+        return personajeMapper.toModel(personaje, personajeNeo4J);
     }
 
     @Override
     public Personaje recuperarPorNombre(String nombre) {
         PersonajeNeo4J personajeNEO4J = personajeNeo4JDAO.findByNombre(nombre)
-                .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), nombre));
-        PersonajeSQL personajeSQL = personajeDAOSQL.findById(personajeNEO4J.getId())
-                .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), nombre));
-        return personajeMapper.toModel(personajeSQL, personajeNEO4J);
+                .orElseThrow(() -> new EntityNotFoundException(Personaje.class.getName(), nombre));
+        Personaje personaje = personajeDAOSQL.findById(personajeNEO4J.getId())
+                .orElseThrow(() -> new EntityNotFoundException(Personaje.class.getName(), nombre));
+        return personajeMapper.toModel(personaje, personajeNEO4J);
     }
 
     @Override
     public Collection<Personaje> recuperarAmigosDeMisAMigos(String nombre) {
         var amigos = personajeNeo4JDAO.amigosDeMisAmigos(nombre);
         return amigos.stream().map(amigoNeo4J -> {
-            PersonajeSQL personajeSQL = personajeDAOSQL.findById(amigoNeo4J.getId())
-                    .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), amigoNeo4J.getId()));
-            return personajeMapper.toModel(personajeSQL, amigoNeo4J);
+            Personaje personaje = personajeDAOSQL.findById(amigoNeo4J.getId())
+                    .orElseThrow(() -> new EntityNotFoundException(Personaje.class.getName(), amigoNeo4J.getId()));
+            return personajeMapper.toModel(personaje, amigoNeo4J);
         }).toList();
     }
 
     @Override
     public Collection<Personaje> recuperarTodos() {
-        var personajesSql = personajeDAOSQL.findAll();
+        var personajes = personajeDAOSQL.findAll();
         var personajesNeo4J = personajeNeo4JDAO.findAll();
-        return personajesSql.stream().map(personajeSQL -> {
+        return personajes.stream().map(personaje -> {
             var personajeNeo4J = personajesNeo4J.stream()
-                    .filter(p -> p.getId().equals(personajeSQL.getId()))
+                    .filter(p -> p.getId().equals(personaje.getId()))
                     .findFirst()
-                    .orElseThrow(() -> new EntityNotFoundException(PersonajeSQL.class.getName(), personajeSQL.getId()));
-            return personajeMapper.toModel(personajeSQL, personajeNeo4J);
+                    .orElseThrow(() -> new EntityNotFoundException(Personaje.class.getName(), personaje.getId()));
+            return personajeMapper.toModel(personaje, personajeNeo4J);
         }).toList();
     }
 

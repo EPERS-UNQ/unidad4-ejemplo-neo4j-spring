@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="ar.edu.unq.epers.unidad4.model">
+
+    <class name="Item" table="item">
+
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+
+        <property name="nombre" column="nombre" not-null="true"/>
+        <property name="peso" column="peso" not-null="true"/>
+
+        <many-to-one name="owner" class="Personaje" column="owner_id" cascade="none"/>
+
+    </class>
+
+</hibernate-mapping>
+

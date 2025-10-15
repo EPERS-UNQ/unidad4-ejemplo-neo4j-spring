@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Node(primaryLabel = "Personaje")
 public class PersonajeNeo4J {
     @Id

@@ -2,7 +2,10 @@ package ar.edu.unq.epers.unidad4.model;
 
 
 import ar.edu.unq.epers.unidad4.exception.MuchoPesoException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
