@@ -2,8 +2,8 @@ package ar.edu.unq.epers.unidad4.service.impl;
 
 import ar.edu.unq.epers.unidad4.model.Item;
 import ar.edu.unq.epers.unidad4.model.Personaje;
-import ar.edu.unq.epers.unidad4.persistence.repository.ItemRepository;
 import ar.edu.unq.epers.unidad4.persistence.repository.PersonajeRepository;
+import ar.edu.unq.epers.unidad4.persistence.sql.ItemSQLDAO;
 import ar.edu.unq.epers.unidad4.service.interfaces.PersonajeService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ import java.util.Collection;
 public class PersonajeServiceImpl implements PersonajeService {
 
     private final PersonajeRepository personajeRepository;
-    private final ItemRepository itemRepository;
+    private final ItemSQLDAO itemSQLDAO;
 
-    public PersonajeServiceImpl(PersonajeRepository personajeRepository, ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
+    public PersonajeServiceImpl(PersonajeRepository personajeRepository, ItemSQLDAO itemSQLDAO) {
+        this.itemSQLDAO = itemSQLDAO;
         this.personajeRepository = personajeRepository;
     }
 
@@ -40,10 +40,10 @@ public class PersonajeServiceImpl implements PersonajeService {
     @Override
     public void recoger(Long personajeId, Long itemId) {
         Personaje personaje = personajeRepository.recuperar(personajeId);
-        Item item = itemRepository.recuperar(itemId);
+        Item item = itemSQLDAO.getById(itemId);
         personaje.recoger(item);
         personajeRepository.guardar(personaje);
-        itemRepository.guardar(item);
+        itemSQLDAO.save(item);
     }
 
     @Override
