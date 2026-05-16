@@ -7,7 +7,6 @@ import java.util.Collection;
 public interface PersonajeService {
     Personaje guardar(Personaje personajeNeo4J);
     Personaje recuperar(Long personajeId);
-    Personaje recuperarPorNombre(String nombre);
     void recoger(Long personajeId, Long itemId);
     void amigarse(Long personajeId, Long amigoId);
     Collection<Personaje> recuperarAmigosDeMisAMigos(String nombre);

@@ -1,23 +1,27 @@
 package ar.edu.unq.epers.unidad4.model;
 
-
-import ar.edu.unq.epers.unidad4.persistence.neo.entity.PersonajeNeo4J;
-import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
-import ar.edu.unq.epers.unidad4.persistence.sql.entity.PersonajeSQL;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.stream.Collectors;
 
 @Data
+@EqualsAndHashCode(exclude = "owner")
+@ToString(exclude = "owner")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Item {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nombre;
     private int peso;
+
+    @ManyToOne
     private Personaje owner;
 
     public Item(String nombre, int peso) {
@@ -25,15 +29,4 @@ public class Item {
         this.peso = peso;
     }
 
-    public Item(ItemSQL itemSQL) {
-        this.nombre = itemSQL.getNombre();
-        this.peso = itemSQL.getPeso();
-        if (itemSQL.getOwner() != null) {
-            this.owner = new Personaje(itemSQL.getOwner());
-        }
-    }
-
-    public static Item from(ItemSQL itemSQL) {
-        return new Item(itemSQL);
-    }
 }

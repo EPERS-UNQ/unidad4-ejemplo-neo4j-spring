@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.unidad4.controller;
 
+import ar.edu.unq.epers.unidad4.controller.dto.PersonajeSimpleDTO;
 import ar.edu.unq.epers.unidad4.model.Personaje;
 import ar.edu.unq.epers.unidad4.service.interfaces.PersonajeService;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +19,13 @@ public class PersonajeController {
     }
 
     @PostMapping
-    public ResponseEntity<Personaje> guardar(@RequestBody Personaje personaje) {
-        return ResponseEntity.ok(personajeService.guardar(personaje));
+    public ResponseEntity<PersonajeSimpleDTO> guardar(@RequestBody Personaje personaje) {
+        return ResponseEntity.ok(PersonajeSimpleDTO.from(personajeService.guardar(personaje)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Personaje> recuperar(@PathVariable("id") Long personajeId) {
-        return ResponseEntity.ok(personajeService.recuperar(personajeId));
-    }
-
-    @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<Personaje> recuperarPorNombre(@PathVariable String nombre) {
-        return ResponseEntity.ok(personajeService.recuperarPorNombre(nombre));
+    public ResponseEntity<PersonajeSimpleDTO> recuperar(@PathVariable("id") Long personajeId) {
+        return ResponseEntity.ok(PersonajeSimpleDTO.from(personajeService.recuperar(personajeId)));
     }
 
     @PostMapping("/{personajeId}/items/{itemId}")
@@ -45,13 +41,17 @@ public class PersonajeController {
     }
 
     @GetMapping("/amigos-de-amigos/{nombre}")
-    public ResponseEntity<Collection<Personaje>> recuperarAmigosDeMisAMigos(@PathVariable String nombre) {
-        return ResponseEntity.ok(personajeService.recuperarAmigosDeMisAMigos(nombre));
+    public ResponseEntity<Collection<PersonajeSimpleDTO>> recuperarAmigosDeMisAMigos(@PathVariable String nombre) {
+        return ResponseEntity.ok(personajeService.recuperarAmigosDeMisAMigos(nombre).stream()
+                .map(PersonajeSimpleDTO::from)
+                .toList());
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Personaje>> recuperarTodos() {
-        return ResponseEntity.ok(personajeService.recuperarTodos());
+    public ResponseEntity<Collection<PersonajeSimpleDTO>> recuperarTodos() {
+        return ResponseEntity.ok(personajeService.recuperarTodos().stream()
+                .map(PersonajeSimpleDTO::from)
+                .toList());
     }
 
     @DeleteMapping

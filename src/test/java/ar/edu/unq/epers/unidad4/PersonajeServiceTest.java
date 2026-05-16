@@ -57,15 +57,6 @@ public class PersonajeServiceTest {
     }
 
     @Test
-    void testRecuperarPorNombre() {
-        personajeService.guardar(personaje1);
-
-        Personaje recovered = personajeService.recuperarPorNombre("Gandalf");
-        assertNotNull(recovered);
-        assertEquals("Gandalf", recovered.getNombre());
-    }
-
-    @Test
     void testRecogerItem() {
         Personaje savedPersonaje = personajeService.guardar(personaje1);
         Item savedItem = itemService.guardar(item1);
@@ -91,7 +82,6 @@ public class PersonajeServiceTest {
 
     @Test
     void testRecuperarAmigosDeMisAmigos() {
-        // Crear una cadena de amigos: personaje1 -> personaje2 -> personaje3
         Personaje saved1 = personajeService.guardar(personaje1);
         Personaje saved2 = personajeService.guardar(personaje2);
         Personaje saved3 = personajeService.guardar(personaje3);
