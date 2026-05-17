@@ -25,6 +25,16 @@ public class PersonajeNeo4J {
     @Relationship(type = "AMIGO")
     private Set<PersonajeNeo4J> amigos = new HashSet<>();
 
+    /**
+     * Rehidrata el conjunto de amigos del personaje dado, a partir de los amigos
+     * almacenados en esta instancia.
+     *
+     * <p>La "rehidratación" consiste en tomar los datos persistidos (en este caso,
+     * los amigos persistidos en Neo4J) y reconstruir los
+     * objetos {@link Personaje} completos, asignándoselos al personaje recibido.
+     *
+     * @param personaje el {@link Personaje} al que se le rehidratarán (agregaran) los amigos.
+     */
     public void proyectarAmigos(Personaje personaje) {
         personaje.setAmigos(this.amigos.stream()
                 .map(a -> {
