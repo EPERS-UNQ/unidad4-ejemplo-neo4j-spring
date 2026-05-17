@@ -6,15 +6,12 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
-import java.util.Optional;
+
 
 public interface PersonajeNeo4JDAO extends Neo4jRepository<PersonajeNeo4J, Long> {
 
     @Query("MATCH(p: Personaje) DETACH DELETE p")
     void detachDelete();
-
-    @Query("MATCH(p: Personaje {nombre: $nombre }) RETURN p LIMIT 1")
-    Optional<PersonajeNeo4J> findByNombre(@Param("nombre") String nombre);
 
     @Query("""
         MATCH(p: Personaje {nombre: $nombre })

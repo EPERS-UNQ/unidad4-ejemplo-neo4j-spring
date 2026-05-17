@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.unidad4.controller;
 
+import ar.edu.unq.epers.unidad4.controller.dto.ItemDTO;
 import ar.edu.unq.epers.unidad4.model.Item;
 import ar.edu.unq.epers.unidad4.service.interfaces.ItemService;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +19,27 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Item> guardar(@RequestBody Item itemSQL) {
-        return ResponseEntity.ok(itemService.guardar(itemSQL));
+    public ResponseEntity<ItemDTO> guardar(@RequestBody Item itemSQL) {
+        return ResponseEntity.ok(ItemDTO.from(itemService.guardar(itemSQL)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Item> recuperar(@PathVariable("id") Long itemId) {
-        return ResponseEntity.ok(itemService.recuperar(itemId));
+    public ResponseEntity<ItemDTO> recuperar(@PathVariable("id") Long itemId) {
+        return ResponseEntity.ok(ItemDTO.from(itemService.recuperar(itemId)));
     }
 
     @GetMapping("/pesados/{peso}")
-    public ResponseEntity<Collection<Item>> getMasPesados(@PathVariable int peso) {
-        return ResponseEntity.ok(itemService.getMasPesados(peso));
+    public ResponseEntity<Collection<ItemDTO>> getMasPesados(@PathVariable int peso) {
+        return ResponseEntity.ok(itemService.getMasPesados(peso).stream()
+                .map(ItemDTO::from)
+                .toList());
     }
 
     @GetMapping("/personajes-debiles/{vida}")
-    public ResponseEntity<Collection<Item>> getItemsDePersonajesDebiles(@PathVariable int vida) {
-        return ResponseEntity.ok(itemService.getItemsDePersonajesDebiles(vida));
+    public ResponseEntity<Collection<ItemDTO>> getItemsDePersonajesDebiles(@PathVariable int vida) {
+        return ResponseEntity.ok(itemService.getItemsDePersonajesDebiles(vida).stream()
+                .map(ItemDTO::from)
+                .toList());
     }
 
     @DeleteMapping

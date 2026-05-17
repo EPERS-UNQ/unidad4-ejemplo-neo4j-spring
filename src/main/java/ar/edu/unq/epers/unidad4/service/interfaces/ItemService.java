@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.unidad4.service.interfaces;
 
 import ar.edu.unq.epers.unidad4.model.Item;
-import ar.edu.unq.epers.unidad4.persistence.sql.entity.ItemSQL;
 
 import java.util.Collection;
 

@@ -1,8 +1,9 @@
 package ar.edu.unq.epers.unidad4.service.impl;
 
 import ar.edu.unq.epers.unidad4.model.Item;
-import ar.edu.unq.epers.unidad4.persistence.repository.ItemRepository;
+import ar.edu.unq.epers.unidad4.persistence.sql.ItemDAO;
 import ar.edu.unq.epers.unidad4.service.interfaces.ItemService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -10,34 +11,34 @@ import java.util.Collection;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemRepository itemRepository;
+    private final ItemDAO itemDAO;
 
-    public ItemServiceImpl(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
+    public ItemServiceImpl(ItemDAO itemDAO) {
+        this.itemDAO = itemDAO;
     }
 
     @Override
     public Item guardar(Item item) {
-        return itemRepository.guardar(item);
+        return itemDAO.save(item);
     }
 
     @Override
     public Item recuperar(Long itemId) {
-        return itemRepository.recuperar(itemId);
+        return itemDAO.findById(itemId).orElseThrow(() -> new EntityNotFoundException("No se encontro un item con id " + itemId));
     }
 
     @Override
     public Collection<Item> getMasPesados(int peso) {
-        return itemRepository.getMasPesados(peso);
+        return itemDAO.getMasPesados(peso);
     }
 
     @Override
     public Collection<Item> getItemsDePersonajesDebiles(int vida) {
-        return itemRepository.getItemsDePersonajesDebiles(vida);
+        return itemDAO.getItemsDePersonajesDebiles(vida);
     }
 
     @Override
     public void clearAll() {
-        itemRepository.clearAll();
+        itemDAO.deleteAll();
     }
 }
