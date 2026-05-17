@@ -29,7 +29,7 @@ public class PersonajeNeo4J {
      * Rehidrata el conjunto de amigos del personaje dado, a partir de los amigos
      * almacenados en esta instancia.
      *
-     * <p>La "rehidratación" consiste en tomar los datos persistidos (en este caso,
+     * La "rehidratación" consiste en tomar los datos persistidos (en este caso,
      * los amigos persistidos en Neo4J) y reconstruir los
      * objetos {@link Personaje} completos, asignándoselos al personaje recibido.
      *
